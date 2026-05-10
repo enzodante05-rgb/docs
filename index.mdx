@@ -1,37 +1,97 @@
 ---
-title: "CryptoBot"
-description: "Automated cryptocurrency trading bot running on a VPS, built with TypeScript"
+title: "Introduction"
+description: "Welcome to the new home for your documentation"
 ---
 
-## Overview
+## Setting up
 
-CryptoBot is a TypeScript-based automated trading bot deployed on a VPS and managed via [pm2](https://pm2.keymetrics.io/). It runs 24/7 on a remote server at `178.156.149.251`.
+Get your documentation site up and running in minutes.
 
-<CardGroup cols={2}>
-  <Card title="Quickstart" icon="rocket" href="/quickstart">
-    Get connected to the VPS and verify the bot is running.
+<Card
+  title="Start here"
+  icon="rocket"
+  href="/quickstart"
+  horizontal
+>
+  Follow our three step quickstart guide.
+</Card>
+
+## Make it yours
+
+Design a docs site that looks great and empowers your users.
+
+<Columns cols={2}>
+  <Card
+    title="Edit locally"
+    icon="pen-to-square"
+    href="/development"
+  >
+    Edit your docs locally and preview them in real time.
   </Card>
-  <Card title="Development" icon="code" href="/development">
-    Edit source files locally and push changes to the VPS.
+  <Card
+    title="Customize your site"
+    icon="palette"
+    href="/essentials/settings"
+  >
+    Customize the design and colors of your site to match your brand.
   </Card>
-  <Card title="Deployment" icon="server" href="/deployment">
-    Deploy, restart, and monitor the bot with pm2.
+    <Card
+    title="Set up navigation"
+    icon="map"
+    href="/essentials/navigation"
+  >
+    Organize your docs to help users find what they need and succeed with your product.
   </Card>
-</CardGroup>
+  <Card
+    title="API documentation"
+    icon="terminal"
+    href="/api-reference/introduction"
+  >
+    Auto-generate API documentation from OpenAPI specifications.
+  </Card>
+</Columns>
 
-## Infrastructure
+## Create beautiful pages
 
-| Resource | Value |
-|---|---|
-| VPS IP | `178.156.149.251` |
-| VPS codebase | `/opt/cryptobot/` |
-| Local mirror | `~/Documents/_cryptobot_vps/` |
-| Process manager | pm2 — process name `cryptobot` |
-| Log file | `/root/.pm2/logs/cryptobot-out.log` |
+Everything you need to create world-class documentation.
 
-## Tech stack
+<Columns cols={2}>
+  <Card
+    title="Write with MDX"
+    icon="pen-fancy"
+    href="/essentials/markdown"
+  >
+    Use MDX to style your docs pages.
+  </Card>
+  <Card
+    title="Code samples"
+    icon="code"
+    href="/essentials/code"
+  >
+    Add sample code to demonstrate how to use your product.
+  </Card>
+  <Card
+    title="Images"
+    icon="image"
+    href="/essentials/images"
+  >
+    Display images and other media.
+  </Card>
+  <Card
+    title="Reusable snippets"
+    icon="recycle"
+    href="/essentials/reusable-snippets"
+  >
+    Write once and reuse across your docs.
+  </Card>
+</Columns>
 
-- **Runtime**: Node.js (TypeScript compiled to `dist/`)
-- **Process manager**: pm2
-- **Deployment**: custom `deploy.sh` script (rsync + compile)
-- **SSH access**: `root@178.156.149.251`
+## Need inspiration?
+
+<Card
+  title="See complete examples"
+  icon="stars"
+  href="https://mintlify.com/customers"
+>
+  Browse our showcase of exceptional documentation sites.
+</Card>

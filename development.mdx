@@ -1,71 +1,94 @@
 ---
-title: "Development"
-description: "Edit source files locally and deploy changes to the VPS"
+title: 'Development'
+description: 'Preview changes locally to update your docs'
 ---
 
-## Workflow overview
+<Info>
+  **Prerequisites**:
+  - Node.js version 19 or higher
+  - A docs repository with a `docs.json` file
+</Info>
 
-All source files are TypeScript (`.ts`) in `~/Documents/_cryptobot_vps/`. Never edit the compiled `dist/` folder directly — it is overwritten on every deploy.
-
-```
-Edit .ts files  →  run ./deploy.sh  →  bot restarts on VPS
-```
-
-## Local setup
-
-The local mirror of the VPS codebase lives at:
-
-```
-~/Documents/_cryptobot_vps/
-```
-
-This directory is kept in sync with `/opt/cryptobot/` on the VPS via the deploy script.
-
-## Making changes
+Follow these steps to install and run Mintlify on your operating system.
 
 <Steps>
-  <Step title="Edit TypeScript source files">
-    Open any `.ts` file in `~/Documents/_cryptobot_vps/` with your editor of choice.
+<Step title="Install the Mintlify CLI">
 
-    ```bash
-    cd ~/Documents/_cryptobot_vps
-    # e.g.
-    code src/strategy.ts
-    ```
-  </Step>
-  <Step title="Deploy to VPS">
-    From the local codebase directory, run the deploy script:
+```bash
+npm i -g mint
+```
+</Step>
 
-    ```bash
-    cd ~/Documents/_cryptobot_vps && ./deploy.sh
-    ```
+<Step title="Preview locally">
 
-    The script compiles TypeScript, rsyncs the output to `/opt/cryptobot/` on the VPS, and restarts the pm2 process.
-  </Step>
-  <Step title="Verify the deployment">
-    Check that the bot started cleanly after the deploy:
+Navigate to your docs directory where your `docs.json` file is located, and run the following command:
 
-    ```bash
-    ssh root@178.156.149.251 "pm2 logs cryptobot --lines 30 --nostream"
-    ```
-  </Step>
+```bash
+mint dev
+```
+
+A local preview of your documentation will be available at `http://localhost:3000`.
+
+</Step>
 </Steps>
 
-## Key rules
+## Custom ports
 
-<Warning>
-  **Never edit `dist/` directly.** The `dist/` folder is generated from TypeScript source and will be overwritten the next time `./deploy.sh` runs. All changes must be made in the `.ts` source files.
-</Warning>
+By default, Mintlify uses port 3000. You can customize the port Mintlify runs on by using the `--port` flag. For example, to run Mintlify on port 3333, use this command:
 
-- All logic lives in `.ts` files — treat `dist/` as an artifact.
-- Run `./deploy.sh` after every change; there is no hot-reload on the VPS.
-- The deploy script uses `--update-env` on pm2 restart, so environment variable changes take effect automatically.
+```bash
+mint dev --port 3333
+```
 
-## VPS file locations
+If you attempt to run Mintlify on a port that's already in use, it will use the next available port:
 
-| Path | Purpose |
-|---|---|
-| `/opt/cryptobot/` | Production codebase root |
-| `/opt/cryptobot/dist/` | Compiled JavaScript (do not edit) |
-| `/root/.pm2/logs/cryptobot-out.log` | stdout log |
-| `/root/.pm2/logs/cryptobot-error.log` | stderr / crash log |
+```md
+Port 3000 is already in use. Trying 3001 instead.
+```
+
+## Mintlify versions
+
+Please note that each CLI release is associated with a specific version of Mintlify. If your local preview does not align with the production version, please update the CLI:
+
+```bash
+npm mint update
+```
+
+## Validating links
+
+The CLI can assist with validating links in your documentation. To identify any broken links, use the following command:
+
+```bash
+mint broken-links
+```
+
+## Deployment
+
+If the deployment is successful, you should see the following:
+
+<Frame>
+  <img src="/images/checks-passed.png" alt="Screenshot of a deployment confirmation message that says All checks have passed." style={{ borderRadius: '0.5rem' }} />
+</Frame>
+
+## Code formatting
+
+We suggest using extensions on your IDE to recognize and format MDX. If you're a VSCode user, consider the [MDX VSCode extension](https://marketplace.visualstudio.com/items?itemName=unifiedjs.vscode-mdx) for syntax highlighting, and [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) for code formatting.
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title='Error: Could not load the "sharp" module using the darwin-arm64 runtime'>
+
+    This may be due to an outdated version of node. Try the following:
+    1. Remove the currently-installed version of the CLI: `npm remove -g mint`
+    2. Upgrade to Node v19 or higher.
+    3. Reinstall the CLI: `npm i -g mint`
+  </Accordion>
+
+  <Accordion title="Issue: Encountering an unknown error">
+  
+    Solution: Go to the root of your device and delete the `~/.mintlify` folder. Then run `mint dev` again.
+  </Accordion>
+</AccordionGroup>
+
+Curious about what changed in the latest CLI version? Check out the [CLI changelog](https://www.npmjs.com/package/mintlify?activeTab=versions).
