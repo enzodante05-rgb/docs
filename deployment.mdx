@@ -1,0 +1,106 @@
+---
+title: "Deployment"
+description: "Deploy changes and manage the CryptoBot process on the VPS"
+---
+
+## Deploy changes
+
+Run the deploy script from your Mac after editing `.ts` source files:
+
+```bash
+cd ~/Documents/_cryptobot_vps && ./deploy.sh
+```
+
+The script handles compilation and syncs the result to the VPS, then restarts the bot.
+
+## pm2 operations
+
+All commands below are run **on the VPS** after SSH-ing in (`ssh root@178.156.149.251`).
+
+### Check status
+
+```bash
+pm2 list
+```
+
+### View recent logs (non-streaming)
+
+```bash
+pm2 logs cryptobot --lines 50 --nostream
+```
+
+### Stream live logs
+
+```bash
+pm2 logs cryptobot
+```
+
+Press `Ctrl+C` to stop streaming.
+
+### Restart the bot
+
+```bash
+pm2 restart cryptobot --update-env
+```
+
+Use `--update-env` to pick up any `.env` changes without a full redeploy.
+
+### Stop the bot
+
+```bash
+pm2 stop cryptobot
+```
+
+### Start the bot (if stopped)
+
+```bash
+pm2 start cryptobot
+```
+
+### Save pm2 process list (persist across reboots)
+
+```bash
+pm2 save
+```
+
+## Log files
+
+| Log | Path |
+|---|---|
+| stdout | `/root/.pm2/logs/cryptobot-out.log` |
+| stderr | `/root/.pm2/logs/cryptobot-error.log` |
+
+Read logs directly:
+
+```bash
+cat /root/.pm2/logs/cryptobot-out.log | tail -100
+cat /root/.pm2/logs/cryptobot-error.log | tail -100
+```
+
+## Deployment checklist
+
+<Steps>
+  <Step title="Edit source files">
+    Modify `.ts` files in `~/Documents/_cryptobot_vps/`. Never touch `dist/`.
+  </Step>
+  <Step title="Run deploy script">
+    ```bash
+    cd ~/Documents/_cryptobot_vps && ./deploy.sh
+    ```
+  </Step>
+  <Step title="Confirm bot is online">
+    ```bash
+    ssh root@178.156.149.251 "pm2 list && pm2 logs cryptobot --lines 20 --nostream"
+    ```
+  </Step>
+</Steps>
+
+## Emergency: manual restart on VPS
+
+If the deploy script fails or you need to restart the bot without redeploying:
+
+```bash
+ssh root@178.156.149.251
+pm2 restart cryptobot --update-env
+pm2 logs cryptobot --lines 50 --nostream
+```
